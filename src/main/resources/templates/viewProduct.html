@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Listing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {    
+            display: flex;
+            flex-direction: row;         
+        }
+/*         .sidebar { */
+/*             width: 15%; */
+/*             padding: 20px; */
+/*             background-color: #f4f4f4; */
+/*         } */
+/*         .sidebar h2 { */
+/*             margin-top: 0; */
+/*         } */
+/*         .sidebar ul { */
+/*             list-style-type: none; */
+/*             padding: 0; */
+/*         } */
+/*         .sidebar ul li { */
+/*             margin: 10px 0; */
+/*         } */
+/*         .sidebar ul li a { */
+/*             text-decoration: none; */
+/*             color: #007bff; */
+/*         } */
+        .main-content {
+            width: 50%;
+            height:50%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            
+        }
+        .product {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .product img {
+            max-width: 150px;
+            margin-right: 20px;
+        }
+        .product-details {
+            flex-grow: 1;
+        }
+        .product-details h3 {
+            margin: 0 0 10px;
+        }
+        .product-details p {
+            margin: 5px 0;
+        }
+        .product-details .price {
+            font-weight: bold;
+        }
+        .product-details .view-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="main-content">
+        <div class="product" th:each="prodct :${prodcts}">
+            <div class="form-group">
+                <img id="imagePreview" src="#" alt="Image Preview" th:src="@{${'/productImages/' +prodct.imageName}}" style="display: block; width: 250px; height: 250px;">
+            </div>
+            <div class="product-details">
+                <h3 th:text="${prodct.name}">Choco lava</h3>
+                <p class="price" th:text="${prodct.price}">₹ 250.0</p>
+                <p th:text="${prodct.description}">tasty cake</p>
+                <a href="#" th:href="@{/user/shop/viewproduct/{productId}(id=${prodct.productId})}" class="view-button">View Product</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

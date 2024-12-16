@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel Product</title>
+    <style>
+        /* Basic styling for demonstration purposes */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-btn, .update-btn {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .delete-btn {
+            background-color: #ff3333;
+            color: white;
+            border-radius: 5px;
+        }
+        .update-btn {
+            background-color: #33cc33;
+            color: white;
+            border-radius: 5px;
+        }
+        #add-btn {
+            background-color: #0c24b1;
+            color: white;
+            border-radius: 5px;
+            width: 135px;
+            height: 41px;
+            margin-left: 13px;
+            margin-bottom: 13px;
+            margin-top: 13px;
+        }
+    </style>
+</head>
+<body>
+    <button id="add-btn" onclick="location.href='/admin/product/productAdd'">Add Product</button>
+    <table>
+        <thead>
+            <tr>
+                <th>SN</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Preview</th>
+                <th>Delete</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="prodctTest, indxPrdct: ${prodct}">
+                <td th:text="${indxPrdct.index + 1}">001</td>
+                <td th:text="${prodctTest.name}">kerry</td>
+                <td th:text="${prodctTest.category.name}">Category</td>
+                <td><img src="" height="100px" width="100px" th:src="@{${'/productImages/'+prodctTest.imageName}}"></td>
+                <td>
+                	<button class="delete-btn" th:data-prod-id="${prodctTest.productId}" onclick="deleteProduct(this)">Delete</button>
+                </td>
+                <td>
+                	<button class="update-btn" th:update-prod-id="${prodctTest.productId}" onclick="updateProduct(this)">Update</button>
+                </td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+
+    
+    <script>                                              // JavaScript (for demonstration purposes)
+        
+    function deleteProduct(button) {
+        	const productId=button.getAttribute('data-prod-id');
+        	 // Perform DELETE request using Fetch API
+            fetch(`/product/deleting/${productId}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Category deleted successfully!');
+                    // Optionally, reload the page or remove the row from the table
+                    window.location.reload();
+                } else {
+                    alert('Failed to delete category.');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting category:', error);
+            });
+        }
+    
+    function updateProduct(button){
+    	const productId=button.getAttribute('update-prod-id')
+    	window.location.href=`/product/updateProduct/${productId}`; 
+    }
+    
+    
+    </script> 
+</body>
+</html>

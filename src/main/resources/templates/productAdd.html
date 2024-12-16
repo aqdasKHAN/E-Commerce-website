@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a new Product</title>
+    <link rel="stylesheet" th:href="@{/css/productAdd.css}">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="mom's cake studio logo">
+        </div>
+        <nav>
+            <a href="#">admin-home</a>
+            <a href="#">logout</a>
+        </nav>
+    </header>
+    <main>
+        <h1>Add a new Product</h1>
+        <form th:action="@{/admin/product/addingProduct}" method="post" id="adding-product" th:object="${prodctDTO}" enctype="multipart/form-data" >
+            <input type="hidden" name="id" th:field="*{productId}"> 
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter name" th:field="*{name}">
+            </div>
+            <div class="form-group">
+                <label for="category">Select Category</label>
+                <select id="category" name="category" th:field="*{cat_id}">
+                    <option th:each="catgry :${categries}" th:value="${catgry.catId}" th:text="${catgry.name}">
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" value="0.0" th:field="*{price}">
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight in grams</label>
+                <input type="number" id="weight" name="weight" value="0.0" th:field="*{weight}">
+            </div>
+            <div class="form-group">
+                <label for="description">Product Description</label>
+                <textarea id="description" name="description" th:field="*{description}"></textarea>
+            </div>          
+            <div class="form-group">
+                <label for="image">Product Image</label>
+                <input type="file" id="image" name="productImage" accept="image/jpeg, image/png" onchange="previewImage(event)">
+                <!--<input type="text" th:field="*{imageName}">-->
+            </div>
+            
+            <!-- Image tag to display the preview -->
+            <div class="form-group">
+                <img id="imagePreview" src="#" alt="Image Preview" th:src="@{${'/productImages/' +prodctDTO.imageName}}" style="display: none; width: 200px; height: 200px;">
+            </div>
+            
+            <input type="hidden" name="imgName" th:value="${prodctDTO.imageName}">
+             
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+   <script>
+        document.getElementById("adding-product").addEventListener("submit", function (event) {
+            const nameInput = document.getElementById("name").value;
+            const categoryInput = document.getElementById("category").value;
+            const priceInput = document.getElementById("price").value;
+            const weightInput = document.getElementById("weight").value;
+            const descriptionInput = document.getElementById("description").value;
+            const imageInput = document.getElementById("image").value;
+
+            if (!(nameInput && categoryInput && priceInput && weightInput && descriptionInput && imageInput)) {
+                alert("Please input something ");
+                event.preventDefault();
+            }
+        });
+   
+   function previewImage(event) {
+        const input = event.target;
+        const imagePreview = document.getElementById("imagePreview");
+
+        // Check if there is a selected file
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            // When the file is loaded, set it as the source of the image preview
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block"; // Show the preview image
+            };
+
+            reader.readAsDataURL(input.files[0]); // Convert the file to a data URL
+        } else {
+            imagePreview.style.display = "none"; // Hide preview if no file is selected
+        }
+    }
+
+    // Event listener for the file input change
+    document.getElementById("image").addEventListener("change", previewImage);
+
+        
+
+    </script>
+</body>
+
+</html>
